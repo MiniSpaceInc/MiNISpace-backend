@@ -2,8 +2,10 @@ package pl.pw.mini.minispace.dtos;
 import  pl.pw.mini.minispace.entities.Event;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.UUID;
 
-public record EventDto(int id, String uud, String name, String Organizer, LocalDateTime date,String description) {
+public record EventDto(int id, UUID uud, String name, String Organizer, LocalDateTime date, String description) {
     public static EventDto valueFrom(Event e)
     {
         return new EventDto(e.getId(), e.getUuid(),e.getName(),e.getOrganizer(),e.getDate(),e.getDescription());
