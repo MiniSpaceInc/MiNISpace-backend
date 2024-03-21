@@ -6,8 +6,8 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OAuthRequest {
+public class OAuthAccessTokenDto {
     private @NonNull String token;
+    private @NonNull String tokenSecret;
     private @NonNull String verifier;
-    private @NonNull String userSecret;
 }

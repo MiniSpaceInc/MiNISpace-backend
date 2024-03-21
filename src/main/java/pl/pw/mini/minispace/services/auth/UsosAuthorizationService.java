@@ -5,13 +5,16 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import pl.pw.mini.minispace.dtos.oauth.OAuthRequest;
+import pl.pw.mini.minispace.dtos.oauth.OAuthAccessTokenDto;
+import pl.pw.mini.minispace.dtos.oauth.OAuthRequestTokenDto;
+import pl.pw.mini.minispace.dtos.oauth.OAuthRequestTokenResponse;
 
 @Slf4j
 @Service
 public class UsosAuthorizationService implements OAuthAuthorizationService {
 
     private final static String SYSTEM = "USOS";
+
     @Value("${usos.request.token.url}")
     private String requestTokenUrl;
 
@@ -28,26 +31,33 @@ public class UsosAuthorizationService implements OAuthAuthorizationService {
     private String usosConsumerSecret;
 
     @Override
-    public String getAuthorizationUrl(String callbackUrl) {
+    public OAuthRequestTokenResponse getRequestToken(OAuthRequestTokenDto oAuthRequestTokenDto) {
         log.info("Authorizing user...");
         OAuthHmacSigner signer = prepareOAuthSigner(usosConsumerSecret, null);
-        OAuthGetTemporaryToken getTemporaryToken = prepareOAuthGetTemporaryToken(callbackUrl, signer);
+        OAuthGetTemporaryToken getTemporaryToken = prepareOAuthGetTemporaryToken(oAuthRequestTokenDto.getCallbackUrl(), signer);
 
         OAuthCredentialsResponse temporaryTokenResponse = requestToken(getTemporaryToken);
 
         OAuthAuthorizeTemporaryTokenUrl authorizeTemporaryTokenUrl = new OAuthAuthorizeTemporaryTokenUrl(authorizeUrl);
         authorizeTemporaryTokenUrl.temporaryToken = temporaryTokenResponse.token;
         String authorizationUrl = authorizeTemporaryTokenUrl.build();
+
         log.info(String.format("Authorization URL is: %s", authorizationUrl));
         log.info(String.format("Request token: %s", temporaryTokenResponse.token));
         log.info(String.format("Request token secret: %s", temporaryTokenResponse.tokenSecret));
-        return authorizationUrl;
+
+        OAuthRequestTokenResponse requestTokenResponse = new OAuthRequestTokenResponse();
+        requestTokenResponse.setRequestToken(temporaryTokenResponse.token);
+        requestTokenResponse.setRequestTokenSecret(temporaryTokenResponse.tokenSecret);
+        requestTokenResponse.setRedirectUrl(authorizationUrl);
+
+        return requestTokenResponse;
     }
 
     @Override
-    public String getAccessToken(OAuthRequest request) {
+    public String getAccessToken(OAuthAccessTokenDto request) {
         log.info("Exchanging request token for access token...");
-        OAuthHmacSigner signer = prepareOAuthSigner(usosConsumerSecret, request.getUserSecret());
+        OAuthHmacSigner signer = prepareOAuthSigner(usosConsumerSecret, request.getTokenSecret());
         OAuthGetAccessToken getAccessToken = prepareOAuthAccessToken(request, signer);
 
         OAuthCredentialsResponse accessTokenResponse = requestToken(getAccessToken);
@@ -83,7 +93,7 @@ public class UsosAuthorizationService implements OAuthAuthorizationService {
         return signer;
     }
 
-    private OAuthGetAccessToken prepareOAuthAccessToken(OAuthRequest request, OAuthHmacSigner signer) {
+    private OAuthGetAccessToken prepareOAuthAccessToken(OAuthAccessTokenDto request, OAuthHmacSigner signer) {
         OAuthGetAccessToken oAuthGetAccessToken = new OAuthGetAccessToken(accessTokenUrl);
         oAuthGetAccessToken.temporaryToken = request.getToken();
         oAuthGetAccessToken.consumerKey = usosConsumerKey;

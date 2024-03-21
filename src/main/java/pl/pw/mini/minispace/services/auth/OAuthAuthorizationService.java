@@ -1,8 +1,10 @@
 package pl.pw.mini.minispace.services.auth;
 
-import pl.pw.mini.minispace.dtos.oauth.OAuthRequest;
+import pl.pw.mini.minispace.dtos.oauth.OAuthAccessTokenDto;
+import pl.pw.mini.minispace.dtos.oauth.OAuthRequestTokenDto;
+import pl.pw.mini.minispace.dtos.oauth.OAuthRequestTokenResponse;
 
 public interface OAuthAuthorizationService {
-    String getAuthorizationUrl(String callbackUrl);
-    String getAccessToken(OAuthRequest request);
+    OAuthRequestTokenResponse getRequestToken(OAuthRequestTokenDto oAuthRequestTokenDto);
+    String getAccessToken(OAuthAccessTokenDto oAuthAccessTokenDto);
 }
