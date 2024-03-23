@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.pw.mini.minispace.daos.PostRepository;
 import pl.pw.mini.minispace.entities.Post;
+import pl.pw.mini.minispace.enums.MiniSpaceMessages;
+import pl.pw.mini.minispace.exceptions.EntityNotFoundException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -15,6 +17,7 @@ public class SearchPostServiceImpl implements SearchPostService {
 
     @Override
     public Post findById(Long id) {
-        throw new UnsupportedOperationException();
+        return postRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(MiniSpaceMessages.ENTITY_NOT_FOUND_MESSAGE.getMessage(), "Post", id)));
     }
 }
