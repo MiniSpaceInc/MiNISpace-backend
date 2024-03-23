@@ -25,17 +25,12 @@ public class EventService {
     public Collection<EventDto> GetFilteredEvents(EventSearchDetails eventSearchDetails) {
         Pageable pageable= PageRequest.of(eventSearchDetails.Page(),
                 eventSearchDetails.ItemsOnPage());
-        String order;
-        switch (eventSearchDetails.SortBy())
-        {
-            case 0:
-                order="";
-                break;
-            default:
-                order="A";
-        }
-        System.out.println(order);
-        return eventRepository.findAll(pageable).stream()
+        return eventRepository.findByNameContainsIgnoreCaseAndOrganizerContainsIgnoreCaseAndDateBetween(
+                        eventSearchDetails.Name(),
+                        eventSearchDetails.Organizer(),
+                        eventSearchDetails.DateFrom(),
+                        eventSearchDetails.DateTo(),
+                        pageable).stream()
                 .map(EventMapper::ToDto).toList();
     }
 }
