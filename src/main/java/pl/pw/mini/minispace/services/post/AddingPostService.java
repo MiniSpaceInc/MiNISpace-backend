@@ -1,7 +1,7 @@
 package pl.pw.mini.minispace.services.post;
 
-import pl.pw.mini.minispace.dtos.PostDto;
+import pl.pw.mini.minispace.entities.Post;
 
 public interface AddingPostService {
-    void addPost(PostDto postDto, Long eventId);
+    Post addPost(Post post, Long eventId);
 }
