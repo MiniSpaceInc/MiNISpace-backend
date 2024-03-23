@@ -29,6 +29,6 @@ public class Event extends BaseEntity {
     @Column
     private String description;
 
-    @OneToMany(mappedBy = "event", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "event", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Post> posts;
 }
