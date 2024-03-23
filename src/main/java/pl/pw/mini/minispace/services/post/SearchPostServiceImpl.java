@@ -1,6 +1,6 @@
 package pl.pw.mini.minispace.services.post;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.pw.mini.minispace.daos.PostRepository;
@@ -9,7 +9,7 @@ import pl.pw.mini.minispace.enums.MiniSpaceMessages;
 import pl.pw.mini.minispace.exceptions.EntityNotFoundException;
 
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Service
 public class SearchPostServiceImpl implements SearchPostService {
 

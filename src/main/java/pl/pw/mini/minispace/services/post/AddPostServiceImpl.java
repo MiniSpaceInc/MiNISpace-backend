@@ -1,7 +1,7 @@
 package pl.pw.mini.minispace.services.post;
 
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.pw.mini.minispace.daos.PostRepository;
@@ -13,7 +13,7 @@ import pl.pw.mini.minispace.services.EventService;
 import pl.pw.mini.minispace.validators.PostValidator;
 
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Service
 public class AddPostServiceImpl implements AddPostService {
 
