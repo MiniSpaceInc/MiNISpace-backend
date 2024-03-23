@@ -11,4 +11,5 @@ public class RegisterPostDto {
     private Long eventId;
     private String content;
     private LocalDateTime datePosted;
+    private LocalDateTime dateCreated;
 }

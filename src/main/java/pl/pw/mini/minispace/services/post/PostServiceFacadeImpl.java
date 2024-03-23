@@ -7,6 +7,9 @@ import pl.pw.mini.minispace.dtos.post.RegisterPostDto;
 import pl.pw.mini.minispace.entities.Post;
 import pl.pw.mini.minispace.mappers.PostMapper;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 @AllArgsConstructor
 @Service
 public class PostServiceFacadeImpl implements PostServiceFacade {
@@ -19,8 +22,12 @@ public class PostServiceFacadeImpl implements PostServiceFacade {
 
     @Override
     public PostDto addPost(RegisterPostDto postDto) {
-        Post post = addPostService.addPost(postMapper.fromRegisterPostDto(postDto), postDto.getEventId());
-        return postMapper.toDto(post);
+        Post post = postMapper.fromRegisterPostDto(postDto);
+        if (Objects.isNull(post.getDateCreated())) {
+            post.setDateCreated(LocalDateTime.now());
+        }
+
+        return postMapper.toDto(addPostService.addPost(post, postDto.getEventId()));
     }
 
     @Override
