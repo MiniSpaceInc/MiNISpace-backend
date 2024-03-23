@@ -20,13 +20,13 @@ import pl.pw.mini.minispace.enums.MiniSpaceMessages;
 import pl.pw.mini.minispace.exceptions.EntityAlreadyExistsException;
 
 @ExtendWith(MockitoExtension.class)
-class AddingPostServiceImplTest {
+class AddPostServiceImplTest {
 
     @Mock
     private PostRepository postRepository;
 
     @InjectMocks
-    private AddingPostServiceImpl addingPostService;
+    private AddPostServiceImpl addingPostService;
 
     private Post post;
     private Event event;

@@ -22,6 +22,16 @@ public class PostFactory {
         return post;
     }
 
+    public static Post createValidPost(Long id) {
+        Post post = new Post();
+        post.setId(id);
+        post.setContent(DEFAULT_CONTENT);
+        post.setDatePosted(DEFAULT_DATETIME);
+        post.setDateCreated(DEFAULT_DATETIME);
+        post.setVersion(DEFAULT_VERSION);
+        return post;
+    }
+
     public static Post createPostWithEmptyContent() {
         Post post = new Post();
         post.setId(DEFAULT_ID);
