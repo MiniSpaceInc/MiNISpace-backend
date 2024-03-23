@@ -5,18 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Setter
 @Getter
 @Entity
-@Table
-public class Event {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+@Table(name = "Events")
+public class Event extends BaseEntity {
 
     @Column(insertable = false)
     private UUID uuid;
@@ -33,4 +29,6 @@ public class Event {
     @Column
     private String description;
 
+    @OneToMany(mappedBy = "event", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<Post> posts;
 }
