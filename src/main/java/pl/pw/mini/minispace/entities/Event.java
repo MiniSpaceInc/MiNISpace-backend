@@ -1,12 +1,11 @@
 package pl.pw.mini.minispace.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Setter
@@ -30,4 +29,6 @@ public class Event extends BaseEntity {
     @Column
     private String description;
 
+    @OneToMany(mappedBy = "event", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    private List<Post> posts;
 }
