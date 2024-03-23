@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import pl.pw.mini.minispace.dtos.PostDto;
 import pl.pw.mini.minispace.entities.Post;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface PostMapper {
 
     PostDto toDto(Post post);

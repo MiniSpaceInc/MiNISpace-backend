@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import pl.pw.mini.minispace.dtos.EventDto;
 import pl.pw.mini.minispace.entities.Event;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface EventMapper {
     EventDto toDto(Event event);
 
