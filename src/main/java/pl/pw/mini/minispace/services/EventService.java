@@ -16,7 +16,7 @@ public class EventService {
     public Event findById(Long id) {
         return eventRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        String.format(MiniSpaceMessages.ENTITY_NOT_FOUND_MESSAGE.getMessage(), "event", id)));
+                        String.format(MiniSpaceMessages.ENTITY_NOT_FOUND_MESSAGE.getMessage(), "Event", id)));
     }
 
 }
