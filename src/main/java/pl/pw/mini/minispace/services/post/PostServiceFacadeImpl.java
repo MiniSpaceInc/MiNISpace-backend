@@ -2,7 +2,8 @@ package pl.pw.mini.minispace.services.post;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.pw.mini.minispace.dtos.PostDto;
+import pl.pw.mini.minispace.dtos.post.PostDto;
+import pl.pw.mini.minispace.dtos.post.RegisterPostDto;
 import pl.pw.mini.minispace.entities.Post;
 import pl.pw.mini.minispace.mappers.PostMapper;
 
@@ -17,8 +18,8 @@ public class PostServiceFacadeImpl implements PostServiceFacade {
     private PostMapper postMapper;
 
     @Override
-    public PostDto addPost(PostDto postDto) {
-        Post post = addPostService.addPost(postMapper.fromDto(postDto), postDto.getEventId());
+    public PostDto addPost(RegisterPostDto postDto) {
+        Post post = addPostService.addPost(postMapper.fromRegisterPostDto(postDto), postDto.getEventId());
         return postMapper.toDto(post);
     }
 

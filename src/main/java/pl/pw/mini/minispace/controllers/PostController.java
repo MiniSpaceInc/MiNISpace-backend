@@ -3,7 +3,8 @@ package pl.pw.mini.minispace.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.pw.mini.minispace.dtos.PostDto;
+import pl.pw.mini.minispace.dtos.post.PostDto;
+import pl.pw.mini.minispace.dtos.post.RegisterPostDto;
 import pl.pw.mini.minispace.services.post.PostServiceFacade;
 
 @RequestMapping("/api/posts")
@@ -14,7 +15,7 @@ public class PostController {
     private final PostServiceFacade postServiceFacade;
 
     @PostMapping("/add")
-    public ResponseEntity<PostDto> addNewPost(@RequestBody PostDto postDto) {
+    public ResponseEntity<PostDto> addNewPost(@RequestBody RegisterPostDto postDto) {
         return ResponseEntity.ok(postServiceFacade.addPost(postDto));
     }
 
