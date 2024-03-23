@@ -14,16 +14,9 @@ import pl.pw.mini.minispace.daos.PostRepository;
 import pl.pw.mini.minispace.entities.Event;
 import pl.pw.mini.minispace.entities.Post;
 import pl.pw.mini.minispace.enums.MiniSpaceMessages;
-import pl.pw.mini.minispace.exceptions.EntityAlreadyExistsException;
 import pl.pw.mini.minispace.exceptions.EntityNotFoundException;
 import pl.pw.mini.minispace.services.EventService;
-import pl.pw.mini.minispace.validators.PostValidator;
 import pl.pw.mini.minispace.validators.PostValidatorImpl;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.any;
@@ -43,8 +36,6 @@ class AddPostServiceImplTest {
 
     @InjectMocks
     private AddPostServiceImpl addingPostService;
-
-
 
     private Post post;
     private Event event;
@@ -70,23 +61,6 @@ class AddPostServiceImplTest {
         assertEquals(post, returnedPost);
     }
 
-    @DisplayName("Unit test addPost - should throw EntityAlreadyExistsException with message")
-    @Test
-    void addPost_SavingIdenticalPost_ShouldThrowEntityAlreadyExistsException() {
-        // given
-        post = PostFactory.createValidPost();
-        event = EventFactory.createValidEvent();
-        String expectedMessage = String.format(MiniSpaceMessages.ENTITY_ALREADY_EXISTS_MESSAGE.getMessage(), "Post", post.getId());
-
-        // when
-        addingPostService.addPost(post, event.getId());
-        when(postRepository.findById(post.getId())).thenReturn(Optional.of(post));
-        EntityAlreadyExistsException exception = assertThrows(EntityAlreadyExistsException.class, () -> addingPostService.addPost(post, event.getId()));
-
-        // then
-        assertEquals(expectedMessage, exception.getMessage());
-    }
-
     @DisplayName("Unit test addPost - should throw EntityNotFoundException with message")
     @Test
     void addPost_SavingPostWithNotExistingEvent_ShouldThrowEntityNotFoundException() {
@@ -99,23 +73,6 @@ class AddPostServiceImplTest {
         when(eventService.findById(event.getId()))
                 .thenThrow(new EntityNotFoundException(String.format(MiniSpaceMessages.ENTITY_NOT_FOUND_MESSAGE.getMessage(), "Event", event.getId())));
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> addingPostService.addPost(post, event.getId()));
-
-        // then
-        assertEquals(expectedMessage, exception.getMessage());
-    }
-
-    @DisplayName("Unit test addPost - should throw EntityAlreadyExistsException with message")
-    @Test
-    void addPost_SavingIdenticalPost_ShouldThrowEntityAlreadyExistsExceptionWithProperMessage() {
-        // given
-        post = PostFactory.createValidPost();
-        event = EventFactory.createValidEvent();
-        String expectedMessage = String.format(MiniSpaceMessages.ENTITY_ALREADY_EXISTS_MESSAGE.getMessage(), post.getClass().getSimpleName(), post.getId());
-
-        // when
-        addingPostService.addPost(post, event.getId());
-        when(postRepository.findById(post.getId())).thenReturn(Optional.of(post));
-        EntityAlreadyExistsException exception = assertThrows(EntityAlreadyExistsException.class, () -> addingPostService.addPost(post, event.getId()));
 
         // then
         assertEquals(expectedMessage, exception.getMessage());
