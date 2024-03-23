@@ -34,10 +34,9 @@ class PostValidatorImplTest {
         post = PostFactory.createValidPost();
 
         // when
-        ValidationException exception = assertThrows(ValidationException.class, () -> postValidator.validateNewPost(post));
 
         // then
-        assertNull(exception);
+        assertDoesNotThrow(() -> postValidator.validateNewPost(post));
     }
 
     @DisplayName("Unit test validateNewPost with empty content - should throw ValidationException with message")
