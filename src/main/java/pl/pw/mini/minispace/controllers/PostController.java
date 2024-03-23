@@ -22,4 +22,10 @@ public class PostController {
     public ResponseEntity<PostDto> findPost(@PathVariable Long postId) {
         return ResponseEntity.ok(postServiceFacade.findById(postId));
     }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Object> deletePost(@PathVariable Long postId) {
+        postServiceFacade.deletePost(postId);
+        return ResponseEntity.ok().build();
+    }
 }

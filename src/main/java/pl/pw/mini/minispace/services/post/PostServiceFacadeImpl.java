@@ -12,6 +12,7 @@ public class PostServiceFacadeImpl implements PostServiceFacade {
 
     private AddPostService addPostService;
     private SearchPostService searchPostService;
+    private DeletePostService deletePostService;
 
     private PostMapper postMapper;
 
@@ -25,5 +26,10 @@ public class PostServiceFacadeImpl implements PostServiceFacade {
     public PostDto findById(Long id) {
         Post post = searchPostService.findById(id);
         return postMapper.toDto(post);
+    }
+
+    @Override
+    public void deletePost(Long id) {
+        deletePostService.deletePost(id);
     }
 }
