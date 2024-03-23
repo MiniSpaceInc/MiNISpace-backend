@@ -11,7 +11,7 @@ import pl.pw.mini.minispace.entities.Post;
 public class AddingPostServiceImpl implements AddingPostService {
 
     @Override
-    public Post addPost(Post post, Long eventId) {
+    public void addPost(Post post, Long eventId) {
         throw new UnsupportedOperationException();
     }
 }
