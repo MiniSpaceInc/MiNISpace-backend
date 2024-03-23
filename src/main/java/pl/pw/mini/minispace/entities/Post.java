@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 @Table(name = "Posts")
 public class Post extends BaseEntity {
 
+    @Column(name = "event_id")
+    private Long eventId;
+
     @Column
     private String content;
 
