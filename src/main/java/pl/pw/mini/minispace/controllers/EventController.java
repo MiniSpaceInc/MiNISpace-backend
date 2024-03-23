@@ -22,10 +22,6 @@ public class EventController {
     @GetMapping("")
     public ResponseEntity<Collection<EventDto>> GetEvents(@RequestBody EventSearchDetails eventSearchDetails) {
         var eventDtos= eventService.GetFilteredEvents(eventSearchDetails);
-        for (var e: eventDtos)
-        {
-            System.out.println(e);
-        }
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(eventDtos);
     }
 }

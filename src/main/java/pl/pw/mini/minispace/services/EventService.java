@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.Collections;
 import pl.pw.mini.minispace.entities.Event;
 import pl.pw.mini.minispace.dtos.EventDto;
+import pl.pw.mini.minispace.mappers.EventMapper;
 
 
 @Service
@@ -20,9 +21,21 @@ import pl.pw.mini.minispace.dtos.EventDto;
 public class EventService {
 
     private final EventRepository eventRepository;
-    private final ModelMapper mapper;
-    public Collection<Event> GetFilteredEvents(EventSearchDetails eventSearchDetails) {
-        Pageable pageable= PageRequest.of(0,2);
-        return eventRepository.findByNameContainsIgnoreCase("A",pageable);
+
+    public Collection<EventDto> GetFilteredEvents(EventSearchDetails eventSearchDetails) {
+        Pageable pageable= PageRequest.of(eventSearchDetails.Page(),
+                eventSearchDetails.ItemsOnPage());
+        String order;
+        switch (eventSearchDetails.SortBy())
+        {
+            case 0:
+                order="";
+                break;
+            default:
+                order="A";
+        }
+        System.out.println(order);
+        return eventRepository.findAll(pageable).stream()
+                .map(EventMapper::ToDto).toList();
     }
 }
