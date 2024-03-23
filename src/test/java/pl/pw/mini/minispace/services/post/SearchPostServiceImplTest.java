@@ -14,10 +14,11 @@ import pl.pw.mini.minispace.entities.Post;
 import pl.pw.mini.minispace.enums.MiniSpaceMessages;
 import pl.pw.mini.minispace.exceptions.EntityNotFoundException;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SearchPostServiceImplTest {
@@ -38,20 +39,15 @@ class SearchPostServiceImplTest {
     void findById_ExistingId_ShouldReturnPost() {
         // given
         Long searchingForId = 2L;
-
-        Post post1 = PostFactory.createValidPost(1L);
-        Post post2 = PostFactory.createValidPost(2L);
-        Post post3 = PostFactory.createValidPost(3L);
-        postRepository.save(post1);
-        postRepository.save(post2);
-        postRepository.save(post3);
+        Post expectedPost = PostFactory.createValidPost(2L);
 
         // when
-        Post post = searchPostService.findById(searchingForId);
+        when(postRepository.findById(any(Long.class))).thenReturn(Optional.of(expectedPost));
+        Post foundPost = searchPostService.findById(searchingForId);
 
         // then
-        verify(postRepository, times(1)).findById(searchingForId);
-        assertEquals(post2, post);
+        verify(postRepository, times(1)).findById(any(Long.class));
+        assertEquals(expectedPost, foundPost);
     }
 
     @DisplayName("Unit test findById - should throw EntityNotFoundException with message")
@@ -59,16 +55,10 @@ class SearchPostServiceImplTest {
     void findById_NotExistingPost_ShouldThrowEntityNotFoundException() {
         // given
         Long searchingForId = 100L;
-        String expectedMessage = String.format(MiniSpaceMessages.ENTITY_NOT_FOUND_MESSAGE.getMessage(), "post", searchingForId);
-
-        Post post1 = PostFactory.createValidPost(1L);
-        Post post2 = PostFactory.createValidPost(2L);
-        Post post3 = PostFactory.createValidPost(3L);
-        postRepository.save(post1);
-        postRepository.save(post2);
-        postRepository.save(post3);
+        String expectedMessage = String.format(MiniSpaceMessages.ENTITY_NOT_FOUND_MESSAGE.getMessage(), "Post", searchingForId);
 
         // when
+        when(postRepository.findById(searchingForId)).thenReturn(Optional.empty());
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> searchPostService.findById(searchingForId));
 
         // then

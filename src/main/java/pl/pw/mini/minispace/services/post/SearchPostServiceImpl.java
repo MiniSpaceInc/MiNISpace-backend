@@ -13,7 +13,7 @@ import pl.pw.mini.minispace.exceptions.EntityNotFoundException;
 @Service
 public class SearchPostServiceImpl implements SearchPostService {
 
-    private final PostRepository postRepository;
+    private PostRepository postRepository;
 
     @Override
     public Post findById(Long id) {
