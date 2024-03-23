@@ -50,19 +50,35 @@ class AddingPostServiceImplTest {
         verify(postRepository, times(1)).save(post);
     }
 
-    @DisplayName("Unit test addPost - should throw EntityAlreadyExistsException")
+    @DisplayName("Unit test addPost - should throw EntityAlreadyExistsException with message")
     @Test
     void addPost_SavingIdenticalPost_ShouldThrowEntityAlreadyExistsException() {
         // given
         post = PostFactory.createValidPost();
         event = EventFactory.createValidEvent();
+        String expectedMessage = String.format(MiniSpaceMessages.ENTITY_ALREADY_EXISTS_MESSAGE.getMessage(), "post", post.getId());
 
         // when
         addingPostService.addPost(post, event.getId());
         EntityAlreadyExistsException exception = assertThrows(EntityAlreadyExistsException.class, () -> addingPostService.addPost(post, event.getId()));
 
         // then
-        assertNotNull(exception);
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @DisplayName("Unit test addPost - should throw EntityAlreadyExistsException with message")
+    @Test
+    void addPost_SavingPostWithNotExistingEvent_ShouldThrowEntityAlreadyExistsException() {
+        // given
+        post = PostFactory.createValidPost();
+        event = EventFactory.createNonExistingEvent();
+        String expectedMessage = String.format(MiniSpaceMessages.ENTITY_NOT_FOUND_MESSAGE.getMessage(), "event", event.getId());
+
+        // when
+        EntityAlreadyExistsException exception = assertThrows(EntityAlreadyExistsException.class, () -> addingPostService.addPost(post, event.getId()));
+
+        // then
+        assertEquals(expectedMessage, exception.getMessage());
     }
 
     @DisplayName("Unit test addPost - should throw EntityAlreadyExistsException with message")
