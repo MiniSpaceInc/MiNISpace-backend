@@ -3,8 +3,13 @@ package pl.pw.mini.minispace.services.post;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import pl.pw.mini.minispace.daos.PostRepository;
+import pl.pw.mini.minispace.dtos.SortDto;
 import pl.pw.mini.minispace.dtos.post.PostSearchDetailsDto;
 import pl.pw.mini.minispace.entities.Post;
 import pl.pw.mini.minispace.enums.MiniSpaceMessages;
@@ -24,7 +29,33 @@ public class SearchPostServiceImpl implements SearchPostService {
     }
 
     @Override
-    public Page<Post> searchPosts(PostSearchDetailsDto postSearchDetailsDto) {
-        throw new UnsupportedOperationException();
+    public Page<Post> searchPosts(PostSearchDetailsDto searchDetailsDto) {
+        Specification<Post> specification = buildSpecification(searchDetailsDto);
+        Sort sort = buildSort(searchDetailsDto.getPageable().getSort());
+        Pageable pageable = PageRequest.of(searchDetailsDto.getPageable().getPage(), searchDetailsDto.getPageable().getSize(), sort);
+        return postRepository.findAll(specification, pageable);
+    }
+
+    public Specification<Post> buildSpecification(PostSearchDetailsDto searchDetailsDto) {
+        Specification<Post> specification = Specification.where(null);
+
+        if (searchDetailsDto.getEventId() != null) {
+            specification = specification.and(PostSpecifications.hasEqualEventId(searchDetailsDto.getEventId()));
+        }
+        if (searchDetailsDto.getDateFrom() != null) {
+            specification = specification.and(PostSpecifications.hasDatePostedFrom(searchDetailsDto.getDateFrom()));
+        }
+        if (searchDetailsDto.getDateTo() != null) {
+            specification = specification.and(PostSpecifications.hasDatePostedTo(searchDetailsDto.getDateTo()));
+        }
+
+        return specification;
+    }
+
+    public Sort buildSort(SortDto sortDto) {
+        return Sort.by(
+                sortDto
+                .getDirection()
+                .equalsIgnoreCase("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC, sortDto.getSortBy());
     }
 }

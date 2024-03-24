@@ -1,9 +1,11 @@
 package pl.pw.mini.minispace.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.pw.mini.minispace.dtos.post.PostDto;
+import pl.pw.mini.minispace.dtos.post.PostSearchDetailsDto;
 import pl.pw.mini.minispace.dtos.post.RegisterPostDto;
 import pl.pw.mini.minispace.services.post.PostServiceFacade;
 
@@ -28,5 +30,10 @@ public class PostController {
     public ResponseEntity<Object> deletePost(@PathVariable Long postId) {
         postServiceFacade.deletePost(postId);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<Page<PostDto>> searchPosts(@RequestBody PostSearchDetailsDto searchDetailsDto) {
+        return ResponseEntity.ok(postServiceFacade.searchPosts(searchDetailsDto));
     }
 }

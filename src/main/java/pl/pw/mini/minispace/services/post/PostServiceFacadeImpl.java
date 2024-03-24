@@ -1,8 +1,10 @@
 package pl.pw.mini.minispace.services.post;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import pl.pw.mini.minispace.dtos.post.PostDto;
+import pl.pw.mini.minispace.dtos.post.PostSearchDetailsDto;
 import pl.pw.mini.minispace.dtos.post.RegisterPostDto;
 import pl.pw.mini.minispace.entities.Post;
 import pl.pw.mini.minispace.mappers.PostMapper;
@@ -23,10 +25,6 @@ public class PostServiceFacadeImpl implements PostServiceFacade {
     @Override
     public PostDto addPost(RegisterPostDto postDto) {
         Post post = postMapper.fromRegisterPostDto(postDto);
-        if (Objects.isNull(post.getDateCreated())) {
-            post.setDateCreated(LocalDateTime.now());
-        }
-
         return postMapper.toDto(addPostService.addPost(post, postDto.getEventId()));
     }
 
@@ -39,5 +37,11 @@ public class PostServiceFacadeImpl implements PostServiceFacade {
     @Override
     public void deletePost(Long id) {
         deletePostService.deletePost(id);
+    }
+
+    @Override
+    public Page<PostDto> searchPosts(PostSearchDetailsDto searchDetailsDto) {
+        return searchPostService.searchPosts(searchDetailsDto)
+                .map(postMapper::toDto);
     }
 }
