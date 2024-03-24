@@ -27,6 +27,18 @@ public class EventFactory {
         return event;
     }
 
+    public static Event createValidEvent(Long id) {
+        Event event = new Event();
+        event.setId(id);
+        event.setDescription(DEFAULT_DESCRIPTION);
+        event.setUuid(DEFAULT_UUID);
+        event.setName(DEFAULT_NAME);
+        event.setDate(DEFAULT_DATETIME);
+        event.setDateCreated(DEFAULT_DATETIME);
+        event.setVersion(DEFAULT_VERSION);
+        return event;
+    }
+
     public static Event createNonExistingEvent() {
         Event event = new Event();
         event.setId(NON_EXISTING_ID);

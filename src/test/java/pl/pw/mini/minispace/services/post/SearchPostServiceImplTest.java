@@ -8,16 +8,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import pl.pw.mini.minispace.EventFactory;
 import pl.pw.mini.minispace.PostFactory;
 import pl.pw.mini.minispace.daos.PostRepository;
+import pl.pw.mini.minispace.dtos.post.PostSearchDetailsDto;
+import pl.pw.mini.minispace.entities.Event;
 import pl.pw.mini.minispace.entities.Post;
 import pl.pw.mini.minispace.enums.MiniSpaceMessages;
 import pl.pw.mini.minispace.exceptions.EntityNotFoundException;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,5 +70,31 @@ class SearchPostServiceImplTest {
 
         // then
         assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @DisplayName("Unit test searchPosts - should return PagedPostsWithSameEventId")
+    @Test
+    void searchPosts_ExistingEventAndPosts_ShouldReturnPagedPostsWithSameEventId() {
+        // given
+        Long searchingForEventId = 5L;
+        Event event = EventFactory.createValidEvent(searchingForEventId);
+        Page<Post> pagePosts = PostFactory.createPageOfPosts(PostFactory.createListOfValidPostsWithEvents(event));
+        PostSearchDetailsDto searchDetailsDto = PostFactory.createPostSearchDetailsDto(0, 10, new String[]{"id"}, "ASC");
+        Specification<Post> specification = searchPostService.buildSpecification(searchDetailsDto);
+        Sort sort = searchPostService.buildSort(searchDetailsDto.getPageable().getSort());
+        Pageable pageable = PageRequest.of(searchDetailsDto.getPageable().getPage(), searchDetailsDto.getPageable().getSize(), sort);
+
+        // when
+        when(postRepository.findAll(specification, pageable)).thenReturn(pagePosts);
+        Page<Post> result = searchPostService.searchPosts(searchDetailsDto);
+
+        // then
+        assertNotNull(result);
+
+        Long expectedEventId = event.getId();
+        for (Post post : result.getContent()) {
+            assertNotNull(post.getEvent());
+            assertEquals(expectedEventId, post.getEvent().getId(), "All posts should have the same eventId");
+        }
     }
 }
