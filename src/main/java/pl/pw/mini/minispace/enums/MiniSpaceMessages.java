@@ -1,5 +1,8 @@
 package pl.pw.mini.minispace.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum MiniSpaceMessages {
     ENTITY_ALREADY_EXISTS_MESSAGE("%s with id %d already exists"),
     ENTITY_NOT_FOUND_MESSAGE("%s with id %d was not found"),
@@ -14,9 +17,4 @@ public enum MiniSpaceMessages {
     }
 
     private final String message;
-
-    public String getMessage() {
-        return this.message;
-    }
-
 }
