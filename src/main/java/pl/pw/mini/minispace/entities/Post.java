@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "Posts")
 public class Post extends BaseEntity {
 

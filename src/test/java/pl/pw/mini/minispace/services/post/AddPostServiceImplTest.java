@@ -15,7 +15,7 @@ import pl.pw.mini.minispace.entities.Event;
 import pl.pw.mini.minispace.entities.Post;
 import pl.pw.mini.minispace.enums.MiniSpaceMessages;
 import pl.pw.mini.minispace.exceptions.EntityNotFoundException;
-import pl.pw.mini.minispace.services.EventService;
+import pl.pw.mini.minispace.services.event.SearchEventServiceImpl;
 import pl.pw.mini.minispace.validators.PostValidatorImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,7 +29,7 @@ class AddPostServiceImplTest {
     private PostRepository postRepository;
 
     @Mock
-    private EventService eventService;
+    private SearchEventServiceImpl searchEventService;
 
     @Mock
     private PostValidatorImpl postValidator;
@@ -70,7 +70,7 @@ class AddPostServiceImplTest {
         String expectedMessage = String.format(MiniSpaceMessages.ENTITY_NOT_FOUND_MESSAGE.getMessage(), "Event", event.getId());
 
         // when
-        when(eventService.findById(event.getId()))
+        when(searchEventService.findById(event.getId()))
                 .thenThrow(new EntityNotFoundException(String.format(MiniSpaceMessages.ENTITY_NOT_FOUND_MESSAGE.getMessage(), "Event", event.getId())));
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> addingPostService.addPost(post, event.getId()));
 
