@@ -1,5 +1,6 @@
 package pl.pw.mini.minispace.mappers;
 
+import org.mapstruct.Mapper;
 import pl.pw.mini.minispace.dtos.EventDto;
 import pl.pw.mini.minispace.entities.Event;
 

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import pl.pw.mini.minispace.daos.PostRepository;
 import pl.pw.mini.minispace.entities.Event;
 import pl.pw.mini.minispace.entities.Post;
-import pl.pw.mini.minispace.services.EventService;
+import pl.pw.mini.minispace.services.event.SearchEventServiceImpl;
 import pl.pw.mini.minispace.validators.PostValidator;
 
 @Slf4j
@@ -16,7 +16,7 @@ import pl.pw.mini.minispace.validators.PostValidator;
 public class AddPostServiceImpl implements AddPostService {
 
     private PostRepository postRepository;
-    private EventService eventService;
+    private SearchEventServiceImpl eventService;
     private PostValidator postValidator;
 
     @Transactional
