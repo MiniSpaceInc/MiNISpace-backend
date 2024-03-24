@@ -10,6 +10,9 @@ import pl.pw.mini.minispace.entities.Post;
 import pl.pw.mini.minispace.services.event.SearchEventServiceImpl;
 import pl.pw.mini.minispace.validators.PostValidator;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 @Slf4j
 @AllArgsConstructor
 @Service
@@ -24,6 +27,13 @@ public class AddPostServiceImpl implements AddPostService {
     public Post addPost(Post post, Long eventId) {
         log.info("Adding new post...");
         Event event = eventService.findById(eventId);
+
+        if (Objects.isNull(post.getDatePosted())) {
+            post.setDatePosted(LocalDateTime.now());
+        }
+        if (Objects.isNull(post.getDateCreated())) {
+            post.setDateCreated(LocalDateTime.now());
+        }
 
         postValidator.validateNewPost(post);
 
