@@ -13,7 +13,7 @@ public enum MiniSpaceMessages {
         this.message = message;
     }
 
-    private String message;
+    private final String message;
 
     public String getMessage() {
         return this.message;
