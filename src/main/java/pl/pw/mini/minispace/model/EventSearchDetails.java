@@ -1,4 +1,4 @@
-package pl.pw.mini.minispace.dtos;
+package pl.pw.mini.minispace.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class EventSearchDetailsDto {
+public class EventSearchDetails {
     private String name;
     private String organizer;
     private LocalDateTime dateFrom;

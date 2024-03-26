@@ -1,17 +1,16 @@
 package pl.pw.mini.minispace.services.event;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.pw.mini.minispace.daos.EventRepository;
-import pl.pw.mini.minispace.dtos.EventSearchDetailsDto;
-import java.util.Collection;
+
 import pl.pw.mini.minispace.entities.Event;
-import pl.pw.mini.minispace.dtos.EventDto;
-import pl.pw.mini.minispace.mappers.EventMapper;
 import pl.pw.mini.minispace.enums.MiniSpaceMessages;
 import pl.pw.mini.minispace.exceptions.EntityNotFoundException;
+import pl.pw.mini.minispace.model.EventSearchDetails;
 
 
 @Service
@@ -19,18 +18,39 @@ import pl.pw.mini.minispace.exceptions.EntityNotFoundException;
 public class SearchEventServiceImpl implements SearchEventService {
 
     private final EventRepository eventRepository;
-    private final EventMapper eventMapper;
 
-    public Collection<EventDto> getFilteredEvents(EventSearchDetailsDto eventSearchDetails) {
-        Pageable pageable = PageRequest.of(eventSearchDetails.page(), eventSearchDetails.itemsOnPage());
+    public Page<Event> getEventsPage(EventSearchDetails eventSearchDetails) {
+        Pageable pageable = PageRequest.of(eventSearchDetails.getPage(), eventSearchDetails.getItemsOnPage());
 
-        return eventRepository.findByNameContainsIgnoreCaseAndOrganizerContainsIgnoreCaseAndDateBetween(
-                        eventSearchDetails.name(),
-                        eventSearchDetails.organizer(),
-                        eventSearchDetails.dateFrom(),
-                        eventSearchDetails.dateTo(),
-                        pageable).stream()
-                .map(eventMapper::toDto).toList();
+        if (eventSearchDetails.getDateFrom() == null && eventSearchDetails.getDateTo() == null) {
+            return eventRepository.findByNameContainsAndOrganizerContains(
+                    eventSearchDetails.getName(),
+                    eventSearchDetails.getOrganizer(),
+                    pageable);
+        }
+
+        if (eventSearchDetails.getDateFrom() != null && eventSearchDetails.getDateTo() != null) {
+            return eventRepository.findByNameContainsAndOrganizerContainsAndDateBetween(
+                    eventSearchDetails.getName(),
+                    eventSearchDetails.getOrganizer(),
+                    eventSearchDetails.getDateFrom(),
+                    eventSearchDetails.getDateTo(),
+                    pageable);
+        }
+
+        if (eventSearchDetails.getDateFrom() != null) {
+            return eventRepository.findByNameContainsAndOrganizerContainsAndDateAfter(
+                    eventSearchDetails.getName(),
+                    eventSearchDetails.getOrganizer(),
+                    eventSearchDetails.getDateFrom(),
+                    pageable);
+        }
+
+        return eventRepository.findByNameContainsAndOrganizerContainsAndDateBefore(
+                eventSearchDetails.getName(),
+                eventSearchDetails.getOrganizer(),
+                eventSearchDetails.getDateTo(),
+                pageable);
     }
 
     public Event findById(Long id) {
@@ -38,6 +58,4 @@ public class SearchEventServiceImpl implements SearchEventService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format(MiniSpaceMessages.ENTITY_NOT_FOUND_MESSAGE.getMessage(), "Event", id)));
     }
-
-
 }
