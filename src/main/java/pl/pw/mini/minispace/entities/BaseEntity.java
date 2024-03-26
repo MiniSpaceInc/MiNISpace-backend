@@ -15,13 +15,13 @@ public abstract class BaseEntity {
     private Long id;
 
     @Column(name = "date_created", nullable = false, updatable = false)
-    private LocalDateTime dateCreated;
+    private LocalDateTime dateCreated = LocalDateTime.now();
 
     @Column(name = "date_modified")
     private LocalDateTime dateModified;
 
     @Version
-    private Long version;
+    private Long version = 0L;
 
     @PostUpdate
     public void onUpdate() {

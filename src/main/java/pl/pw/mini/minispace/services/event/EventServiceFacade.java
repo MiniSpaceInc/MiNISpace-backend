@@ -9,4 +9,5 @@ import java.util.Collection;
 public interface EventServiceFacade {
     Collection<EventDto> getFilteredEvents(EventSearchDetailsDto eventSearchDetails);
     Event findById(Long id);
+    void addEvent(EventDto eventDto);
 }
