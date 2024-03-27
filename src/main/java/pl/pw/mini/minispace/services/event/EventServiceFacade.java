@@ -6,7 +6,7 @@ import pl.pw.mini.minispace.dtos.EventSearchDetailsDto;
 import pl.pw.mini.minispace.entities.Event;
 
 public interface EventServiceFacade {
-    Page<EventDto> getEventsPage(EventSearchDetailsDto eventSearchDetails);
+    Page<EventDto> searchEvents(EventSearchDetailsDto eventSearchDetails);
     Event findById(Long id);
     EventDto addEvent(EventDto eventDto);
 }

@@ -12,7 +12,5 @@ public class EventSearchDetailsDto {
     private String organizer;
     private LocalDateTime dateFrom;
     private LocalDateTime dateTo;
-    private int page;
-    private int itemsPerPage;
-    private int sortBy;
+    private PageableDto pageable;
 }

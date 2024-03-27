@@ -7,22 +7,18 @@ import pl.pw.mini.minispace.dtos.EventDto;
 import pl.pw.mini.minispace.dtos.EventSearchDetailsDto;
 import pl.pw.mini.minispace.entities.Event;
 import pl.pw.mini.minispace.mappers.EventMapper;
-import pl.pw.mini.minispace.mappers.EventSearchDetailsMapper;
 
 @Service
 @RequiredArgsConstructor
 public class EventServiceFacadeImpl implements EventServiceFacade {
 
     private final EventMapper eventMapper;
-    private final EventSearchDetailsMapper eventSearchDetailsMapper;
     private final SearchEventService searchEventService;
     private final AddEventService addEventService;
 
     @Override
-    public Page<EventDto> getEventsPage(EventSearchDetailsDto eventSearchDetails) {
-        var mappedSearchDetails = eventSearchDetailsMapper.fromDto(eventSearchDetails);
-        var page = searchEventService.getEventsPage(mappedSearchDetails);
-        return page.map(eventMapper::toDto);
+    public Page<EventDto> searchEvents(EventSearchDetailsDto eventSearchDetails) {
+        return searchEventService.searchEvents(eventSearchDetails).map(eventMapper::toDto);
     }
 
     @Override
