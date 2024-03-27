@@ -8,12 +8,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import pl.pw.mini.minispace.daos.EventRepository;
-
 import pl.pw.mini.minispace.dtos.EventSearchDetailsDto;
 import pl.pw.mini.minispace.entities.Event;
 import pl.pw.mini.minispace.enums.MiniSpaceMessages;
 import pl.pw.mini.minispace.exceptions.EntityNotFoundException;
-import pl.pw.mini.minispace.model.EventSearchDetails;
 import pl.pw.mini.minispace.utils.SortUtils;
 
 
