@@ -7,9 +7,14 @@ import java.time.LocalDateTime;
 
 public class EventSpecifications {
 
-    public static Specification<Event> hasEqualName(String name) {
+    public static Specification<Event> hasName(String name) {
         return ((root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("name"), name));
+                criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
+    }
+
+    public static Specification<Event> hasOrganizer(String organizer) {
+        return ((root, query, criteriaBuilder) ->
+                criteriaBuilder.like(criteriaBuilder.lower(root.get("organizer")), "%" + organizer.toLowerCase() + "%"));
     }
 
     public static Specification<Event> hasDateFrom(LocalDateTime dateFrom) {
