@@ -20,7 +20,7 @@ public class SearchEventServiceImpl implements SearchEventService {
     private final EventRepository eventRepository;
 
     public Page<Event> getEventsPage(EventSearchDetails eventSearchDetails) {
-        Pageable pageable = PageRequest.of(eventSearchDetails.getPage(), eventSearchDetails.getItemsOnPage());
+        Pageable pageable = PageRequest.of(eventSearchDetails.getPage(), eventSearchDetails.getItemsPerPage());
 
         if (eventSearchDetails.getDateFrom() == null && eventSearchDetails.getDateTo() == null) {
             return eventRepository.findByNameContainsAndOrganizerContains(

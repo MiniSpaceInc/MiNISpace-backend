@@ -13,6 +13,6 @@ public class EventSearchDetailsDto {
     private LocalDateTime dateFrom;
     private LocalDateTime dateTo;
     private int page;
-    private int itemsOnPage;
+    private int itemsPerPage;
     private int sortBy;
 }
