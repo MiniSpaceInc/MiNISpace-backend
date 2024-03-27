@@ -41,7 +41,6 @@ public class PostServiceFacadeImpl implements PostServiceFacade {
 
     @Override
     public Page<PostDto> searchPosts(PostSearchDetailsDto searchDetailsDto) {
-        return searchPostService.searchPosts(searchDetailsDto)
-                .map(postMapper::toDto);
+        return searchPostService.searchPosts(searchDetailsDto).map(postMapper::toDto);
     }
 }

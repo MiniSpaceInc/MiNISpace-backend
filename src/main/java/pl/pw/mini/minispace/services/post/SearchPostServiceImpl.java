@@ -14,6 +14,7 @@ import pl.pw.mini.minispace.dtos.post.PostSearchDetailsDto;
 import pl.pw.mini.minispace.entities.Post;
 import pl.pw.mini.minispace.enums.MiniSpaceMessages;
 import pl.pw.mini.minispace.exceptions.EntityNotFoundException;
+import pl.pw.mini.minispace.utils.SortUtils;
 
 @Slf4j
 @AllArgsConstructor
@@ -31,7 +32,7 @@ public class SearchPostServiceImpl implements SearchPostService {
     @Override
     public Page<Post> searchPosts(PostSearchDetailsDto searchDetailsDto) {
         Specification<Post> specification = buildSpecification(searchDetailsDto);
-        Sort sort = buildSort(searchDetailsDto.getPageable().getSort());
+        Sort sort = SortUtils.buildSort(searchDetailsDto.getPageable().getSort());
         Pageable pageable = PageRequest.of(searchDetailsDto.getPageable().getPage(), searchDetailsDto.getPageable().getSize(), sort);
         return postRepository.findAll(specification, pageable);
     }
@@ -52,10 +53,4 @@ public class SearchPostServiceImpl implements SearchPostService {
         return specification;
     }
 
-    public Sort buildSort(SortDto sortDto) {
-        return Sort.by(
-                sortDto
-                .getDirection()
-                .equalsIgnoreCase("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC, sortDto.getSortBy());
-    }
 }

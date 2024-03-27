@@ -1,26 +1,24 @@
 package pl.pw.mini.minispace.services.event;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import pl.pw.mini.minispace.daos.EventRepository;
 import pl.pw.mini.minispace.dtos.EventDto;
 import pl.pw.mini.minispace.dtos.EventSearchDetailsDto;
 import pl.pw.mini.minispace.entities.Event;
 import pl.pw.mini.minispace.mappers.EventMapper;
 
-import java.util.Collection;
-
 @Service
 @RequiredArgsConstructor
 public class EventServiceFacadeImpl implements EventServiceFacade {
 
-    private final SearchEventService searchEventService;
-    private final EventRepository eventRepository;
     private final EventMapper eventMapper;
+    private final SearchEventService searchEventService;
+    private final AddEventService addEventService;
 
     @Override
-    public Collection<EventDto> getFilteredEvents(EventSearchDetailsDto eventSearchDetails) {
-        return searchEventService.getFilteredEvents(eventSearchDetails);
+    public Page<EventDto> searchEvents(EventSearchDetailsDto eventSearchDetails) {
+        return searchEventService.searchEvents(eventSearchDetails).map(eventMapper::toDto);
     }
 
     @Override
@@ -29,8 +27,8 @@ public class EventServiceFacadeImpl implements EventServiceFacade {
     }
 
     @Override
-    public void addEvent(EventDto eventDto) {
+    public EventDto addEvent(EventDto eventDto) {
         Event event = eventMapper.fromDto(eventDto);
-        eventRepository.save(event);
+        return eventMapper.toDto(addEventService.addEvent(event));
     }
 }

@@ -1,8 +1,16 @@
 package pl.pw.mini.minispace.dtos;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
-public record EventSearchDetailsDto(String name, String organizer, LocalDateTime dateFrom, LocalDateTime dateTo,
-                                    int page, int itemsOnPage, int sortBy) {
-
+@Getter
+@Setter
+public class EventSearchDetailsDto {
+    private String name;
+    private String organizer;
+    private LocalDateTime dateFrom;
+    private LocalDateTime dateTo;
+    private PageableDto pageable;
 }

@@ -21,6 +21,7 @@ import pl.pw.mini.minispace.entities.Event;
 import pl.pw.mini.minispace.entities.Post;
 import pl.pw.mini.minispace.enums.MiniSpaceMessages;
 import pl.pw.mini.minispace.exceptions.EntityNotFoundException;
+import pl.pw.mini.minispace.utils.SortUtils;
 
 import java.util.Optional;
 
@@ -81,7 +82,7 @@ class SearchPostServiceImplTest {
         Page<Post> pagePosts = PostFactory.createPageOfPosts(PostFactory.createListOfValidPostsWithEvents(event));
         PostSearchDetailsDto searchDetailsDto = PostFactory.createPostSearchDetailsDto(0, 10, new String[]{"id"}, "ASC");
         Specification<Post> specification = searchPostService.buildSpecification(searchDetailsDto);
-        Sort sort = searchPostService.buildSort(searchDetailsDto.getPageable().getSort());
+        Sort sort = SortUtils.buildSort(searchDetailsDto.getPageable().getSort());
         Pageable pageable = PageRequest.of(searchDetailsDto.getPageable().getPage(), searchDetailsDto.getPageable().getSize(), sort);
 
         // when

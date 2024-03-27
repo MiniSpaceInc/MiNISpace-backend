@@ -3,6 +3,7 @@ package pl.pw.mini.minispace.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Generated;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Table(name = "Events")
 public class Event extends BaseEntity {
 
+    @Generated
     @Column(insertable = false)
     private UUID uuid;
 
