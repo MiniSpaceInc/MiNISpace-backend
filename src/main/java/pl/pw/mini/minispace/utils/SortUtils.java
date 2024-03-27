@@ -6,8 +6,7 @@ import pl.pw.mini.minispace.dtos.SortDto;
 public class SortUtils {
 
     public static Sort buildSort(SortDto sortDto) {
-        return Sort.by(
-                sortDto
+        return Sort.by(sortDto
                         .getDirection()
                         .equalsIgnoreCase("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC, sortDto.getSortBy());
     }

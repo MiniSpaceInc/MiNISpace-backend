@@ -1,6 +1,7 @@
 package pl.pw.mini.minispace.services.event;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,8 @@ import pl.pw.mini.minispace.enums.MiniSpaceMessages;
 import pl.pw.mini.minispace.exceptions.EntityNotFoundException;
 import pl.pw.mini.minispace.utils.SortUtils;
 
+import java.time.LocalDateTime;
+
 
 @Service
 @RequiredArgsConstructor
@@ -24,8 +27,15 @@ public class SearchEventServiceImpl implements SearchEventService {
     @Override
     public Page<Event> searchEvents(EventSearchDetailsDto searchDetailsDto) {
         Specification<Event> specification = buildSpecification(searchDetailsDto);
-        Sort sort = SortUtils.buildSort(searchDetailsDto.getPageable().getSort());
-        Pageable pageable = PageRequest.of(searchDetailsDto.getPageable().getPage(), searchDetailsDto.getPageable().getSize(), sort);
+
+        Pageable pageable;
+        if(searchDetailsDto.getPageable().getSort().getSortBy().length > 0) {
+            Sort sort = SortUtils.buildSort(searchDetailsDto.getPageable().getSort());
+            pageable = PageRequest.of(searchDetailsDto.getPageable().getPage(), searchDetailsDto.getPageable().getSize(), sort);
+        } else {
+            pageable = PageRequest.of(searchDetailsDto.getPageable().getPage(), searchDetailsDto.getPageable().getSize());
+        }
+
         return eventRepository.findAll(specification, pageable);
     }
 
@@ -39,13 +49,18 @@ public class SearchEventServiceImpl implements SearchEventService {
         Specification<Event> specification = Specification.where(null);
 
         if (searchDetailsDto.getName() != null) {
-            specification = specification.and(EventSpecifications.hasEqualName(searchDetailsDto.getName()));
+            specification = specification.and(EventSpecifications.hasName(searchDetailsDto.getName()));
+        }
+        if (searchDetailsDto.getOrganizer() != null) {
+            specification = specification.and(EventSpecifications.hasOrganizer(searchDetailsDto.getOrganizer()));
         }
         if (searchDetailsDto.getDateFrom() != null) {
-            specification = specification.and(EventSpecifications.hasDateFrom(searchDetailsDto.getDateFrom()));
+            LocalDateTime dateFrom = searchDetailsDto.getDateFrom().toLocalDate().atStartOfDay();
+            specification = specification.and(EventSpecifications.hasDateFrom(dateFrom));
         }
         if (searchDetailsDto.getDateTo() != null) {
-            specification = specification.and(EventSpecifications.hasDateTo(searchDetailsDto.getDateTo()));
+            LocalDateTime dateTo = searchDetailsDto.getDateTo().toLocalDate().plusDays(1).atStartOfDay().minusNanos(1);
+            specification = specification.and(EventSpecifications.hasDateTo(dateTo));
         }
 
         return specification;
