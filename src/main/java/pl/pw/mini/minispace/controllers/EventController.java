@@ -17,13 +17,11 @@ public class EventController {
 
     @PostMapping("/events")
     public ResponseEntity<Page<EventDto>> getEvents(@RequestBody EventSearchDetailsDto eventSearchDetails) {
-        var eventDtos = eventService.getEventsPage(eventSearchDetails);
-        return ResponseEntity.ok(eventDtos);
+        return ResponseEntity.ok(eventService.searchEvents(eventSearchDetails));
     }
 
     @PostMapping("event")
     public ResponseEntity<EventDto> addEvent(@RequestBody EventDto eventDto) {
-        eventDto = eventService.addEvent(eventDto);
-        return ResponseEntity.ok(eventDto);
+        return ResponseEntity.ok(eventService.addEvent(eventDto));
     }
 }
