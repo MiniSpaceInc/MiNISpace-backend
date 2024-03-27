@@ -20,7 +20,7 @@ public class EventController {
         return ResponseEntity.ok(eventService.searchEvents(eventSearchDetails));
     }
 
-    @PostMapping("event")
+    @PostMapping("/events/add")
     public ResponseEntity<EventDto> addEvent(@RequestBody EventDto eventDto) {
         return ResponseEntity.ok(eventService.addEvent(eventDto));
     }
