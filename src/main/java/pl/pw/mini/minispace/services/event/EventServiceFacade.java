@@ -8,5 +8,5 @@ import pl.pw.mini.minispace.entities.Event;
 public interface EventServiceFacade {
     Page<EventDto> getEventsPage(EventSearchDetailsDto eventSearchDetails);
     Event findById(Long id);
-    void addEvent(EventDto eventDto);
+    EventDto addEvent(EventDto eventDto);
 }

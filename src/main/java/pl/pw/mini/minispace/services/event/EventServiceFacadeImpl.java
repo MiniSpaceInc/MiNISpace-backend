@@ -16,7 +16,7 @@ public class EventServiceFacadeImpl implements EventServiceFacade {
     private final EventMapper eventMapper;
     private final EventSearchDetailsMapper eventSearchDetailsMapper;
     private final SearchEventService searchEventService;
-    private final EventMapper eventMapper;
+    private final AddEventService addEventService;
 
     @Override
     public Page<EventDto> getEventsPage(EventSearchDetailsDto eventSearchDetails) {
@@ -31,8 +31,8 @@ public class EventServiceFacadeImpl implements EventServiceFacade {
     }
 
     @Override
-    public void addEvent(EventDto eventDto) {
+    public EventDto addEvent(EventDto eventDto) {
         Event event = eventMapper.fromDto(eventDto);
-        eventRepository.save(event);
+        return eventMapper.toDto(addEventService.addEvent(event));
     }
 }
